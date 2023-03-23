@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -ne 2 ];
+if [ $# -ne 2 ]
 then
 	echo "ERROR: Inavlid Number of Arguments."
 	echo "Total number of arguments should be 2."
@@ -25,5 +25,4 @@ else
 	echo "\t2)String to be searched in the specified directory path."
 	exit 1
 fi
-
 
