@@ -15,14 +15,19 @@ writestr=$2
 writedir="$(dirname ${writefile})"
 
 mkdir -p $writedir 
-
-if [ -d $writedir ]
+if [ $? -ne 0 ]
 then
-	echo ${writestr} > ${writefile}
-	exit 0
-else 
-	exit 1
+  echo "directory could not be created, permission denied"
+  exit 1
 fi
+
+echo ${writestr} > ${writefile}
+if [ $? -ne 0 ]
+then
+  echo "file could not be created, permission denied"
+  exit 1
+fi
+exit 0
 
 #if [ -r ${writefile} ]
 #then
