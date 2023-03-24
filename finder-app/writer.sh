@@ -1,45 +1,40 @@
 #!/bin/sh
+#   writefile = full path to a file (including filename) on the filesystem
+#  writestr = he second argument is a text string which will be written within this file 
 
-if [ $# -ne 2 ]
+# check number of arguments
+if [ $# -eq 2 ]
 then
-	echo "ERROR: Inavlid Number of Arguments."
-	echo "Total number of arguments should be 2."
-	echo "The order of the arguments should be:"
-	echo "\t1)File Path."
-	echo "\t2)String to be written in the specified file path."
-	exit 1
+  writefile=$1
+  writestr=$2
+  writedir=$(dirname $1) 
+else
+  echo command must take only 2 arguments!!
+  return 1 # Exits with return value 1 error
 fi
 
-writefile=$1
-writestr=$2
-writedir="$(dirname ${writefile})"
-
-mkdir -p $writedir 
-if [ $? -ne 0 ]
+# check if first argument is path to file 
+if [ -e $1 ]
 then
-  echo "directory could not be created, permission denied"
-  exit 1
+  echo $2 > $1 # overwrite the file if it already exists
+  return 0
+fi 
+
+# directory in path not exist, so make it
+mkdir -p $writedir
+if [ $? -eq 1 ] # errot directory write permisiion
+then
+  echo directory could not be created, permission denied!!
+  return 1
 fi
 
-echo ${writestr} > ${writefile}
-if [ $? -ne 0 ]
+# file or in path not exist, so make it
+touch $1
+if [ $? -eq 1 ] # errot file write permisiion
 then
-  echo "file could not be created, permission denied"
-  exit 1
+  echo file could not be created, permission denied!!
+  return 1
+else
+  echo $2 > $1 # write string in the file
 fi
-exit 0
-
-#if [ -r ${writefile} ]
-#then
-#	mkdir -p "$(dirname ${writefile})"
-#	echo ${writestr} > ${writefile}
-#	exit 0
-#else 
-#	echo "ERROR: Inavlid Type of Arguments."
-#	echo "The order of the arguments should be:"
-#	echo "\t1)File Path."
-#	echo "\t2)String to be written in the specified file path."
-#	exit 1
-#fi
-
 
